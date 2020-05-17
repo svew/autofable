@@ -6,10 +6,6 @@ class State:
     BATTLE = 3
     AFTER_QUEST = 4
 
-class CacheType:
-    NONE = 0
-    SINGLE = 1
-    MULTI = 2
     
 # Direction Markers
 UP =     { 'x':0.50, 'y':0.01, 'flip':{}, 'next':{}, 'name':'Up' }

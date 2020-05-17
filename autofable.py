@@ -5,6 +5,7 @@ from config import *
 from PIL import Image
 from cv2 import cv2
 import numpy as np
+from item import *
 
 # Current game state
 game_frame = None
@@ -50,35 +51,37 @@ def bot_loop(state):
         print('Player inside camp, starting...')
         game_map = []
         game_map.append(RIGHT)
+        game_map.append(RIGHT['flip']['next'])
         click_direction(RIGHT)
         time.sleep(1.5)
-        game_map.append(RIGHT['flip']['next'])
         return State.TRAVERSE
 
     if state == State.TRAVERSE:
         if press_button(screen, BANDIT_WAITING):
             print('Found a bandit, attacking!')
-            time.sleep(0.5)
             return State.APPROACHING
         if press_button(screen, TENT):
             print('Found bandit tent, attacking!')
             game_final_battle = True
-            time.sleep(0.5)
             return State.APPROACHING
+        if find_item(screen, NOT_PAUSED) is None: # Game is paused, likely levelup
+            press_button(screen, LEVELUP)
+            time.sleep(0.1)
+            return
         # Nothing in this space, try traversing
         if game_map[-1]['flip'] == game_map[-2]: # Next move is back up the tree
             print(f'Backtracking in direction {game_map[-1]["name"]}')
             click_direction(game_map[-1])
             game_map[-2] = game_map[-2]['next']
             game_map.pop()
-            time.sleep(3)
+            time.sleep(2)
             return
         else:
             if is_path_clear(game_map[-1]):
                 print(f'Path in direction {game_map[-1]["name"]}, traversing')
                 click_direction(game_map[-1])
                 game_map.append(game_map[-1]['flip']['next'])
-                time.sleep(3)
+                time.sleep(2)
                 return
             else:
                 print(f'No path found in direction {game_map[-1]["name"]}')
@@ -131,17 +134,17 @@ def bot_loop(state):
                 return
             else:
                 print("I'll pass...")
-                press_button(screen, PASS, sleep=0.4)
-                press_button(screen, YES, sleep=0.4)
+                press_button(screen, PASS, sleep=0.3)
+                press_button(screen, YES, sleep=0.3)
                 return
         elif find_item(screen, START): #Outside camp, go get healed
             print('Getting healed...')
             click_direction(DOWN, sleep=1.5)
             click_direction(LEFT, sleep=2)
             click_direction(CENTER, sleep=1.5)
-            press_button(None, TALK, sleep=0.5)
-            press_button(None, HEAL, sleep=0.5)
-            press_button(None, DONE, sleep=0.5)
+            press_button(None, TALK, sleep=0.3)
+            press_button(None, HEAL, sleep=0.3)
+            press_button(None, DONE, sleep=0.3)
             click_direction(RIGHT, sleep=2)
             click_direction(UP, sleep=2)
             return State.BEGIN
@@ -186,26 +189,19 @@ def press_button(screen, button, sleep=0):
         time.sleep(sleep)
         return True
 
-cache = {}
+itemcache = ItemCache()
 def find_item(screen, item):
-    if screen is None:
-        screen = get_screenshot()
-    confidence = item['confidence'] if 'confidence' in item else DEFAULT_CONFIDENCE
-    for path in item['img']:
-        offset = (0,0)
-        if item['cache'] is not CacheType.NONE and path in cache:
-            cache_rect = cache[path]
-            screen = screen.crop(cache_rect)
-            offset = (cache_rect[0], cache_rect[1])
+    screen = screen or get_screenshot()
+    confidence = item.get_confidence()
+    for path in item.imglist:
+        offset, screen = itemcache.crop(screen, item)
         try:
             rect = pyautogui.locate(path, screen, confidence=confidence)
             if rect is None:
                 continue
             x = rect.left + rect.width/2 + offset[0]
             y = rect.top + rect.height/2 + offset[1]
-            if item['cache'] is not CacheType.NONE and path not in cache:
-                cache[path] = to_pil_rect(rect)
-                print(f'New cache for {item}: {cache[path]}')
+            itemcache.save(item, rect)
             return (x, y)
         except pyautogui.ImageNotFoundException:
             continue
@@ -213,8 +209,8 @@ def find_item(screen, item):
 
 def find_all_items(screen, item):
     all_list = []
-    confidence = item['confidence'] if 'confidence' in item else DEFAULT_CONFIDENCE
-    for i in item['img']:
+    confidence = item.get_confidence()
+    for i in item.imglist:
         try:
             for pos in pyautogui.locateAll(i, screen, confidence=confidence):
                 all_list.append(pos)
@@ -224,9 +220,6 @@ def find_all_items(screen, item):
 
 def center(rect):
     return (rect[0] + rect[2]/2, rect[1] + rect[3]/2)
-
-def to_pil_rect(rect):
-    return (rect.left, rect.top, rect.left + rect.width, rect.top + rect.height)
 
 def find_game_frame(screen):
     global game_frame
