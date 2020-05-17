@@ -65,6 +65,7 @@ def bot_loop(state):
             game_final_battle = True
             return State.APPROACHING
         if find_item(screen, NOT_PAUSED) is None: # Game is paused, likely levelup
+            print('Leveling up!')
             press_button(screen, LEVELUP)
             time.sleep(0.1)
             return
@@ -122,6 +123,11 @@ def bot_loop(state):
                 return State.TRAVERSE
 
     if state == State.AFTER_QUEST:
+        if find_item(screen, NOT_PAUSED) is None: # Game is paused, likely levelup
+            print('Leveling up!')
+            if press_button(screen, LEVELUP):
+                time.sleep(0.1)
+                return
         if press_button(screen, CLOSE): # Collect Exp and Gold
             print('Collecting gold')
             time.sleep(0.5)
