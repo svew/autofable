@@ -1,0 +1,30 @@
+
+quest:
+    name: Golden Opportunity
+    location: 
+        - Goto: Right
+        - Goto: Right
+        - Goto: Right
+        - Goto: 0.95, 0.3
+        - Goto: Right
+        - Goto: Right
+        - Click: Robina sitting
+        - Click: Talk
+        - Click: Quests
+        - Click: Golden Opportunity
+        - Click: Quest!
+
+map: 
+    type: static
+    layout:
+        - Goto: Right
+        - Goto: Right
+        - Goto: Right
+        - Goto: Right
+        - Click: 0.7, 0.5
+        - Wait: 2
+        - Goto: Down
+        - Goto: Up
+        - Goto: Up
+        - Click: Up
+        - Click: 0.4, 0.3

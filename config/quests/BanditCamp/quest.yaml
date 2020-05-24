@@ -1,0 +1,37 @@
+quest:
+  name: Bandit Camp
+  objective: This one time... at Bandit Camp! Raid the Graywolf Renegades fort. Their ranks include 
+    some of the most wanted outlaws in the world!
+
+map:
+  type: dynamic
+  up:
+    - color: 123, 245, 32
+      pos: 0.4, 0.3
+      confidence: 0.7
+  down:
+    - color: 123, 245, 32
+      pos: 0.4, 0.3
+      confidence: 0.7
+  left: 
+    - color: 123, 245, 32
+      pos: 0.4, 0.3
+      confidence: 0.7
+  right:
+    - color: 123, 245, 32
+      pos: 0.4, 0.3
+      confidence: 0.7
+      
+loop:
+  no-heal:
+    - Goto: Right
+  heal:
+    - Goto: Down
+    - Goto: Left
+    - Click: Robina
+    - Click: Talk
+    - Click: Heal
+    - Click: Done
+    - Goto: Right
+    - Goto: Up
+    - Goto: Right
