@@ -1,0 +1,74 @@
+quest:
+  name: Bandit Camp
+  location: Surewood Forest, Right, Right, Right, Up, Right
+  prereqs:
+  objective: This one time... at Bandit Camp! Raid the Graywolf Renegades fort. Their ranks include 
+    some of the most wanted outlaws in the world!
+  scaled: No
+  exp: Varies
+  gold: Varies
+  monsters:
+    - Renegade Enforcer
+    - Renegade Hunter
+    - Renegade Scout
+    - Robber Baron (1) (Boss)
+    - Cutpurse (1) (Boss)
+    - Thug (1) (Boss)
+  rewards:
+    daggers:
+      - Barber's Blade
+      - Bloodletter
+      - Butcher's Knife
+      - Butter Knife
+      - Drake's Claw
+      - Frost Pointe
+      - Gnomecraft Dagger
+      - Knife of Searing
+      - Misericorde
+      - Pokahauntus
+      - Red Death
+      - Silent Slash
+      - The Burning Curse
+      - Tuning Knife
+      - Tupperblade
+      - Zap Skiver
+      - Zero Six
+    misc:
+      - Advanced CorDemi Codex
+      - Bloodstained Mark of Honor
+      - Fae Action Figure
+      - Reen's Cappuccino Maker
+      - Twilly and Zorbak Stuffed Combo
+
+map:
+  type: dynamic
+  up:
+    - color: 123, 245, 32
+      pos: 0.4, 0.3
+      confidence: 0.7
+  down:
+    - color: 123, 245, 32
+      pos: 0.4, 0.3
+      confidence: 0.7
+  left: 
+    - color: 123, 245, 32
+      pos: 0.4, 0.3
+      confidence: 0.7
+  right:
+    - color: 123, 245, 32
+      pos: 0.4, 0.3
+      confidence: 0.7
+      
+loop:
+  no-heal:
+    - Goto: Right
+  heal:
+    - Goto: Down
+    - Goto: Left
+    - Click: Robina
+    - Click: Talk
+    - Click: Heal
+    - Click: Done
+    - Goto: Right
+    - Goto: Up
+    - Goto: Right
