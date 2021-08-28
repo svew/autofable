@@ -1,4 +1,0 @@
-
-# Settings
-KEEP_REWARD = False
-DEFAULT_CONFIDENCE = 0.9

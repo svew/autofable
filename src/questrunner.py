@@ -196,22 +196,7 @@ def press_button(screen, button, sleep=0):
         return True
 
 itemcache = ItemCache()
-def find_item(screen, item):
-    screen = screen or get_screenshot()
-    confidence = item.get_confidence()
-    for path in item.imglist:
-        offset, screen = itemcache.crop(screen, item)
-        try:
-            rect = pyautogui.locate(path, screen, confidence=confidence)
-            if rect is None:
-                continue
-            x = rect.left + rect.width/2 + offset[0]
-            y = rect.top + rect.height/2 + offset[1]
-            itemcache.save(item, rect)
-            return (x, y)
-        except pyautogui.ImageNotFoundException:
-            continue
-    return None
+
 
 def find_all_items(screen, item):
     all_list = []
@@ -227,29 +212,7 @@ def find_all_items(screen, item):
 def center(rect):
     return (rect[0] + rect[2]/2, rect[1] + rect[3]/2)
 
-def find_game_frame(screen):
-    global game_frame
 
-    img = np.array(screen)
-    thresh = cv2.inRange(img, WINDOW_BORDER_COLOR, WINDOW_BORDER_COLOR)
-    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    if len(contours) == 0:
-        return
-
-    window_border = max(contours, key=cv2.contourArea)
-    x0, y0, w, h = cv2.boundingRect(window_border)
-    window_crop = thresh[y0:y0+h, x0:x0+w]
-    window_thresh = cv2.bitwise_not(window_crop)
-    contours, _ = cv2.findContours(window_thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    if len(contours) == 0:
-        return
-
-    game_border = max(contours, key=cv2.contourArea)
-    x1, y1, w, h = cv2.boundingRect(game_border)
-    if w * h < 540*405:
-        return
-
-    game_frame = (x0 + x1, y0 + y1, w, h)
 
 def is_direction_invalid(direction):
     if direction is None:

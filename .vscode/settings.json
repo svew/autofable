@@ -1,4 +1,11 @@
 {
     "python.linting.pylintEnabled": true,
-    "python.linting.enabled": true
+    "python.linting.enabled": true,
+    "[yaml]": {
+        "editor.tabSize": 2
+	},
+	"[python]": {
+		"editor.tabSize": 4,
+		"editor.insertSpaces": true
+	}
 }

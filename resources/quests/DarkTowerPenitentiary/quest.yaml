@@ -1,0 +1,30 @@
+quest:
+  name: Dark Tower Penitentiary
+  alt-name: Penitentiary
+  prereqs: Completion of Mystlyk Museum
+  objective: Prisons are not the friendliest places at the BEST of times. A prison in Raveloss? REALLY unfriendly! I hope you can find a way out!
+  scaled: Yes
+  monsters:
+    - Cave Creeper (3)
+    - Chaos Weaver Guard (1)
+    - Deathwidow (2)
+    - Moldshroom (6)
+  npcs:
+    - Tomix
+    - Greed
+    - Chaosweaver
+    - Riadne
+  rewards:
+    weapons:
+      - Verne's Blade I
+      - Verne's Blade II
+      - Verne's Blade III
+      - Verne's Staff I
+      - Verne's Staff II
+      - Verne's Staff III
+      - Verne's Dagger I
+      - Verne's Dagger II
+      - Verne's Dagger III
+    helmets:
+      - ChaosWeaver Guard Helm
+      - Black ChoasWeaver Guard Helms
